@@ -3,7 +3,7 @@ scriptencoding utf-8
 let s:save_cpo = &cpo
 set cpo&vim
 
-let s:fzfyml = "fzfyml run"
+let s:fzfyml = "fzfyml3 run"
 let s:tool_dir = expand('<sfile>:p:h')
 let s:temp = tempname()
 let s:yaml = s:tool_dir . "/WordSearch.yml"
@@ -15,10 +15,12 @@ function! WordSearch#Core(word)
             bd!
             let lines = readfile(s:tmpfile)
             if len(lines) > 0
-                for f in lines
-                    let file_line = split(f, ':')
-                    execute("edit +" . file_line[1] . ' ' . file_line[0])
-                    execute('normal zz')
+                for line in lines
+                    if len(line) > 0
+                        let file_line = split(line, ':')
+                        execute("edit +" . file_line[1] . ' ' . file_line[0])
+                        execute('normal zz')
+                    endif
                 endfor
                 redraw!
             endif

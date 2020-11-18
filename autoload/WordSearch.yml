@@ -1,26 +1,19 @@
+variables:
+    var1: "$(pwd)"
 base_task:
-    vars:
-        - var1: "$(pwd)"
-    input: pt '{arg1}' {var1} 2>/dev/null
-    transform: perl {ymldir}/relative_path.pl {var1}
+    source: pt '{{arg1}}' {{var1}} 2>/dev/null
+    source_transform: perl {{yml_dir}}/relative_path.pl {{var1}}
     opts:
         - multi
         - delimiter=':'
         - reverse
-        - header="$(echo "{var1}" | python {ymldir}/norm_path.py -a -t -d)"
+        - header="$(echo "{{var1}}" | python {{yml_dir}}/norm_path.py -a -t -d)"
         - height=9999
-    preview: bash {tooldir}/preview/show_arround_line.sh {1} {2} $LINES
-    output:
+        - preview='bash {{tooldir}}/preview/show_arround_line.sh {1} {2} $LINES'
+    post_operations:
         enter:
             - pipe: grep -o '^[^:]\+:[^:]\+'
-switch_task:
-    ctrl-g:
-      vars:
-        - var1: $(git rev-parse --show-toplevel 2>/dev/null || echo "{var2}")
+task_switch:
     alt-u:
-        vars:
-            - var1: '{var1}/..'
-    alt-j:
-      query: ''
-      vars:
-        - var1: "{pre_query}"
+        variables:
+            var1: '{{var1}}/..'
