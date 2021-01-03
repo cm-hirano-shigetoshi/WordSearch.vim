@@ -1,6 +1,6 @@
-variables:
-    var1: "$(pwd)"
 base_task:
+    variables:
+        var1: "$(pwd)"
     source: pt '{{arg1}}' {{var1}} 2>/dev/null | nkf -w
     source_transform: perl {{yml_dir}}/relative_path.pl {{var1}}
     opts:
