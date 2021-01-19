@@ -3,13 +3,13 @@ base_task:
         var1: "$(pwd)"
     source: pt '{{arg1}}' {{var1}} 2>/dev/null | nkf -w
     source_transform: perl {{yml_dir}}/relative_path.pl {{var1}}
-    opts:
+    options:
         - multi
         - delimiter=':'
         - reverse
         - header="$(echo "{{var1}}" | python {{yml_dir}}/norm_path.py -a -t -d)"
         - height=9999
-        - preview='bash {{tooldir}}/preview/show_arround_line.sh {1} {2} $LINES'
+        - preview='bash {{tool_dir}}/main/preview_arround_line.sh "{}" $FZF_PREVIEW_LINES'
     post_operations:
         enter:
             - pipe: grep -o '^[^:]\+:[^:]\+'
